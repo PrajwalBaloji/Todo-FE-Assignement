@@ -14,6 +14,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const base =
   "inline-flex items-center justify-center rounded-md font-medium transition focus:outline-none";
 
+const disabledStyles = "opacity-50 cursor-not-allowed";
+
 const solidStyles: Record<Variant, string> = {
   primary: "bg-yellow-500 hover:bg-yellow-600",
   secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
@@ -38,6 +40,7 @@ export default function Button({
   size = "medium",
   appearance = "solid",
   className,
+  disabled = false,
   ...props
 }: ButtonProps) {
   return (
@@ -46,8 +49,11 @@ export default function Button({
         base,
         appearance === "solid" ? solidStyles[variant] : textStyles[variant],
         sizes[size],
+        !disabled && "cursor-pointer",
+        disabled && disabledStyles,
         className
       )}
+      disabled={disabled}
       {...props}
     >
       {children}

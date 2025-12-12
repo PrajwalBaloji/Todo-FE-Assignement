@@ -1,11 +1,10 @@
-interface AddTaskCardProps {
-  onClick: () => void;
-}
+import { useTaskContext } from "./TaskContext";
 
-export default function AddTaskCard({ onClick }: AddTaskCardProps) {
+export default function AddTaskCard() {
+  const { focusTitle } = useTaskContext();
   return (
     <button
-      onClick={onClick}
+      onClick={focusTitle}
       className="
         w-full p-4 bg-gray-100  border-t border-gray-200
         hover:bg-gray-50 transition flex items-center gap-3 cursor-pointer

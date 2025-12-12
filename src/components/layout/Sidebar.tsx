@@ -22,17 +22,16 @@ export default function Sidebar() {
         </div>
         <SidebarItem label="Today" />
         <SidebarItem label="Upcoming" />
-        <SidebarItem label="Calendar" />
-        <SidebarItem label="Sticky Wall" />
+        <SidebarItem label="Completed" />
       </ul>
-      <div className="mt-auto px-4 py-3 space-y-1 text-gray-600">
+      {/* <div className="mt-auto px-4 py-3 space-y-1 text-gray-600">
         <button className="block w-fit hover:text-gray-900 cursor-pointer">
           Settings
         </button>
         <button className="block w-fit hover:text-gray-900 cursor-pointer">
           Sign out
         </button>
-      </div>
+      </div> */}
     </nav>
   );
 }
