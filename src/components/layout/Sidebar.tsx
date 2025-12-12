@@ -1,4 +1,9 @@
+import { useTaskContext } from "../../Tasks/TaskContext";
+import type { View } from "../../Tasks/TaskContext/useTaskContext";
+
 export default function Sidebar() {
+  const { search, setSearch } = useTaskContext();
+
   return (
     <nav
       aria-label="Task sections"
@@ -7,12 +12,13 @@ export default function Sidebar() {
       <div className="px-4 py-3 font-semibold text-gray-900 text-lg">Menu</div>
       <div className="px-4 mb-3">
         <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           type="text"
-          placeholder="Search..."
+          placeholder="Search Title..."
           className="
             w-full px-3 py-2 text-sm border border-gray-300 
-            rounded-md bg-white focus:outline-none focus:ring-2 
-            focus:ring-blue-500
+            rounded-md bg-white focus:outline-none
           "
         />
       </div>
@@ -37,9 +43,11 @@ export default function Sidebar() {
 }
 
 function SidebarItem({ label }: { label: string }) {
+  const { setView } = useTaskContext();
   return (
     <li>
       <button
+        onClick={() => setView(label as View)}
         className="
           w-full text-left px-3 py-2 rounded-md 
           hover:bg-gray-100 transition text-gray-700 cursor-pointer

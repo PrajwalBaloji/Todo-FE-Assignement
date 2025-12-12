@@ -1,12 +1,18 @@
 import React, { useContext } from "react";
 import type { Task } from "../TaskCard";
 
+export type View = "Today" | "Upcoming" | "Completed";
+
 interface TaskContextType {
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
   titleRef: React.RefObject<HTMLInputElement | null>;
   selectedTask: Task | null;
   setSelectedTask: (task: Task | null) => void;
+  view: View;
+  setView: (view: View) => void;
+  search: string;
+  setSearch: (search: string) => void;
 }
 
 export const TaskContext = React.createContext<TaskContextType>({
@@ -15,6 +21,10 @@ export const TaskContext = React.createContext<TaskContextType>({
   titleRef: React.createRef<HTMLInputElement>(),
   selectedTask: null,
   setSelectedTask: () => {},
+  view: "Today",
+  setView: () => {},
+  search: "",
+  setSearch: () => {},
 });
 
 export function useTaskContext() {
@@ -22,7 +32,17 @@ export function useTaskContext() {
   if (!context) {
     throw new Error("useTaskContext must be used within a TaskProvider");
   }
-  const { tasks, setTasks, titleRef, selectedTask, setSelectedTask } = context;
+  const {
+    tasks,
+    setTasks,
+    titleRef,
+    selectedTask,
+    setSelectedTask,
+    view,
+    setView,
+    search,
+    setSearch,
+  } = context;
 
   const focusTitle = () => {
     titleRef.current?.focus();
@@ -57,5 +77,9 @@ export function useTaskContext() {
     focusTitle,
     selectedTask,
     setSelectedTask,
+    view,
+    setView,
+    search,
+    setSearch,
   };
 }

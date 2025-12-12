@@ -13,6 +13,7 @@ export default function TaskDetails() {
     setSelectedTask,
     deleteTask,
     focusTitle,
+    setView,
   } = useTaskContext();
   const [{ details, titleError, descriptionError }, dispatch] = useReducer(
     detailsReducer,
@@ -38,6 +39,7 @@ export default function TaskDetails() {
         createdAt: Date.now(),
       };
       addTask(newTask);
+      setView("Today");
     }
     dispatch({ type: "reset" });
     focusTitle();
