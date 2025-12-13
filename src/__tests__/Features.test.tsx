@@ -53,4 +53,23 @@ describe("App functional features", () => {
       screen.queryByRole("button", { name: /task to delete/i })
     ).not.toBeInTheDocument();
   });
+
+  test("user can mark task as done and undone", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await addTask(user, "Mark as done");
+
+    const taskButton = screen.getByRole("button", { name: /mark as done/i });
+    const checkbox = within(taskButton).getByRole("checkbox");
+    const titleText = within(taskButton).getByText(/mark as done/i);
+
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    expect(titleText).toHaveClass("line-through");
+
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+    expect(titleText).not.toHaveClass("line-through");
+  });
 });
