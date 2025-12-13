@@ -6,6 +6,7 @@ import {
 } from "../Tasks/TaskContext/useTaskContext";
 import MainSection from "../components/layout/MainSextion";
 import DetailsSection from "../components/layout/DetailsSection";
+import userEvent from "@testing-library/user-event";
 
 function renderMainSectionWithContext(value: TaskContextType) {
   return render(
@@ -65,23 +66,6 @@ describe("Intial page view", () => {
       expect(screen.getByText(/add new task/i)).toBeInTheDocument();
       expect(screen.getByText(/no tasks yet/i)).toBeInTheDocument();
     });
-
-    test("Displaying tasklist correctly when data available", () => {
-      renderMainSectionWithContext({
-        ...defaultTaskContext,
-        tasks: [
-          {
-            id: "1",
-            title: "Test task",
-            completed: false,
-            createdAt: Date.now(),
-            description: "Test description",
-          },
-        ],
-      });
-
-      expect(screen.getByText(/test task/i)).toBeInTheDocument();
-    });
   });
 
   describe("Details section content", () => {
@@ -104,51 +88,157 @@ describe("Intial page view", () => {
 });
 
 describe("User interaction", () => {
-  test("clicks add task focusses task title input", () => {
+  test("clicking Add Task focuses title input", async () => {
+    const user = userEvent.setup();
     render(<App />);
-
-    const addTaskButton = screen.getByText(/add new task/i);
-    addTaskButton.click();
-
-    const titleInput = screen.getByPlaceholderText(/enter task title/i);
-    expect(titleInput).toHaveFocus();
+    await user.click(screen.getByRole("button", { name: /add new task/i }));
+    expect(screen.getByPlaceholderText(/enter task title/i)).toHaveFocus();
   });
 
-  test("No search results found while searching", () => {
+  test("Tasklist displayed after adding a task", () => {
     renderMainSectionWithContext({
       ...defaultTaskContext,
-      search: "meet",
-    });
-
-    expect(screen.getByText(/no search results found/i)).toBeInTheDocument();
-  });
-
-  test("Search by title filters task list", () => {
-    renderMainSectionWithContext({
-      ...defaultTaskContext,
-      search: "meet",
       tasks: [
         {
           id: "1",
-          title: "Team meeting",
+          title: "Test task",
           completed: false,
           createdAt: Date.now(),
-          description: "Team meeting description",
-        },
-        {
-          id: "2",
-          title: "Buy groceries",
-          completed: false,
-          createdAt: Date.now(),
-          description: "Buy groceries description",
+          description: "Test description",
         },
       ],
     });
-    expect(
-      screen.getByRole("button", { name: /team meeting/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /buy groceries/i })
-    ).not.toBeInTheDocument();
+
+    expect(screen.getByText(/test task/i)).toBeInTheDocument();
+  });
+
+  describe("User search", () => {
+    test("No search results found while searching", () => {
+      renderMainSectionWithContext({
+        ...defaultTaskContext,
+        search: "meet",
+      });
+
+      expect(screen.getByText(/no search results found/i)).toBeInTheDocument();
+    });
+
+    test("Search by title filters task list", () => {
+      renderMainSectionWithContext({
+        ...defaultTaskContext,
+        search: "meet",
+        tasks: [
+          {
+            id: "1",
+            title: "Team meeting",
+            completed: false,
+            createdAt: Date.now(),
+            description: "Team meeting description",
+          },
+          {
+            id: "2",
+            title: "Buy groceries",
+            completed: false,
+            createdAt: Date.now(),
+            description: "Buy groceries description",
+          },
+        ],
+      });
+      expect(
+        screen.getByRole("button", { name: /team meeting/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /buy groceries/i })
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("user can change views from sidebar", () => {
+    test("use can change views", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+
+      expect(
+        screen.getByRole("heading", { name: /today/i })
+      ).toBeInTheDocument();
+      await user.click(screen.getByRole("button", { name: /upcoming/i }));
+      expect(
+        screen.getByRole("heading", { name: /upcoming/i })
+      ).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: /completed/i }));
+      expect(
+        screen.getByRole("heading", { name: /completed/i })
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("Views are reflected correctly in the list", () => {
+    test("Today View are reflected correctly in the list", () => {
+      renderMainSectionWithContext({
+        ...defaultTaskContext,
+        tasks: [
+          {
+            id: "1",
+            title: "Test task",
+            completed: false,
+            createdAt: Date.now(),
+            description: "Test description",
+          },
+        ],
+      });
+      expect(screen.getByText(/test task/i)).toBeInTheDocument();
+    });
+
+    test("Upcoming view shows only upcoming tasks", () => {
+      renderMainSectionWithContext({
+        ...defaultTaskContext,
+        view: "Upcoming",
+        tasks: [
+          {
+            id: "1",
+            title: "Upcoming task",
+            completed: false,
+            createdAt: Date.now(),
+            description: "",
+          },
+          {
+            id: "2",
+            title: "Completed task",
+            completed: true,
+            createdAt: Date.now(),
+            description: "",
+          },
+        ],
+      });
+
+      expect(screen.getByText(/upcoming task/i)).toBeInTheDocument();
+      expect(screen.queryByText(/completed task/i)).not.toBeInTheDocument();
+    });
+
+    test("Completed view shows only completed tasks", () => {
+      renderMainSectionWithContext({
+        ...defaultTaskContext,
+        view: "Completed",
+        tasks: [
+          {
+            id: "1",
+            title: "Done task",
+            completed: true,
+            createdAt: Date.now(),
+            description: "",
+          },
+          {
+            id: "2",
+            title: "Active task",
+            completed: false,
+            createdAt: Date.now(),
+            description: "",
+          },
+        ],
+      });
+
+      expect(screen.getByText(/done task/i)).toBeInTheDocument();
+      expect(screen.queryByText(/active task/i)).not.toBeInTheDocument();
+    });
   });
 });
