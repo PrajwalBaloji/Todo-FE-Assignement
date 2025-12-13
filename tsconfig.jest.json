@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["src/**/*"]
+}

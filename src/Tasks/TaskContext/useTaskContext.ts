@@ -3,7 +3,7 @@ import type { Task } from "../TaskCard";
 
 export type View = "Today" | "Upcoming" | "Completed";
 
-interface TaskContextType {
+export interface TaskContextType {
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
   titleRef: React.RefObject<HTMLInputElement | null>;

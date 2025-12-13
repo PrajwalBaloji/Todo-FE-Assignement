@@ -6,7 +6,7 @@ export default function Sidebar() {
 
   return (
     <nav
-      aria-label="Task sections"
+      aria-label="Task views"
       className="h-full flex flex-col text-sm text-gray-500 bg-gray-100 rounded-2xl"
     >
       <div className="px-4 py-3 font-semibold text-gray-900 text-lg">Menu</div>
@@ -30,14 +30,6 @@ export default function Sidebar() {
         <SidebarItem label="Upcoming" />
         <SidebarItem label="Completed" />
       </ul>
-      {/* <div className="mt-auto px-4 py-3 space-y-1 text-gray-600">
-        <button className="block w-fit hover:text-gray-900 cursor-pointer">
-          Settings
-        </button>
-        <button className="block w-fit hover:text-gray-900 cursor-pointer">
-          Sign out
-        </button>
-      </div> */}
     </nav>
   );
 }

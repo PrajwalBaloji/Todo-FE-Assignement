@@ -21,6 +21,7 @@ export default function TaskCard({ task, searchText }: TaskCardProps) {
 
   return (
     <button
+      aria-label={title}
       onClick={() => {
         setSelectedTask(task);
       }}
@@ -43,7 +44,8 @@ export default function TaskCard({ task, searchText }: TaskCardProps) {
             completed ? "line-through text-gray-400" : "text-gray-600"
           )}
         >
-          {highlightText(title, searchText || "")}
+          {" "}
+          {searchText ? highlightText(title, searchText) : title}
         </span>
       </div>
       <span className="text-gray-500 text-sm">&gt;</span>

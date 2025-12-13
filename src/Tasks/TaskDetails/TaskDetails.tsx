@@ -116,7 +116,6 @@ export default function TaskDetails() {
         <p className="text-red-500 text-xs h-2 pt-2 pb-6">{titleError || ""}</p>
       </div>
       <div className="flex flex-col flex-1">
-        {/* <label className="text-sm text-gray-600 mb-1">Description</label> */}
         <textarea
           className=" py-2 rounded-md borer-none resize-none h-full min-h-[150px] focus:outline-none text-gray-700 text-sm"
           value={details.description}

@@ -16,7 +16,7 @@ export default function TaskList() {
     return <ExmptyList />;
   }
   return (
-    <ul className=" justify-items-start">
+    <ul data-testid="task-list" className=" justify-items-start">
       {filteredList.map((t) => (
         <li key={t.id} className="w-full">
           <TaskCard task={t} />
