@@ -1,59 +1,31 @@
 import { render, screen, within } from "@testing-library/react";
 import App from "../App";
-import {
-  TaskContext,
-  type TaskContextType,
-} from "../Tasks/TaskContext/useTaskContext";
-import MainSection from "../components/layout/MainSextion";
-import DetailsSection from "../components/layout/DetailsSection";
 import userEvent from "@testing-library/user-event";
-
-function renderMainSectionWithContext(value: TaskContextType) {
-  return render(
-    <TaskContext.Provider value={value}>
-      <MainSection />
-    </TaskContext.Provider>
-  );
-}
-
-function renderDetailsSectionWithContext(value: TaskContextType) {
-  return render(
-    <TaskContext.Provider value={value}>
-      <DetailsSection />
-    </TaskContext.Provider>
-  );
-}
-
-const defaultTaskContext: TaskContextType = {
-  view: "Today",
-  search: "",
-  tasks: [],
-  setTasks: jest.fn(),
-  titleRef: { current: null },
-  selectedTask: null,
-  setSelectedTask: jest.fn(),
-  setView: jest.fn(),
-  setSearch: jest.fn(),
-};
+import { renderMainSectionWithContext } from "./testUtils/testrenderers";
+import { renderDetailsSectionWithContext } from "./testUtils/testrenderers";
+import { defaultTaskContext } from "./testUtils/defaultTaskContext";
+import { testData } from "./testUtils/test-data";
 
 describe("Intial page view", () => {
-  describe("sidebar content", () => {
+  describe("Sidebar content", () => {
     test("sidebar shows menu, search, and task views", () => {
       render(<App />);
 
       const sidebar = screen.getByRole("navigation", {
         name: /task views/i,
       });
-      const s = within(sidebar);
-      expect(s.getByText(/menu/i)).toBeInTheDocument();
-      expect(s.getByPlaceholderText(/search title/i)).toBeInTheDocument();
-      expect(s.getByText(/today/i)).toBeInTheDocument();
-      expect(s.getByText(/upcoming/i)).toBeInTheDocument();
-      expect(s.getByText(/completed/i)).toBeInTheDocument();
+      const withinSidebar = within(sidebar);
+      expect(withinSidebar.getByText(/menu/i)).toBeInTheDocument();
+      expect(
+        withinSidebar.getByPlaceholderText(/search title/i)
+      ).toBeInTheDocument();
+      expect(withinSidebar.getByText(/today/i)).toBeInTheDocument();
+      expect(withinSidebar.getByText(/upcoming/i)).toBeInTheDocument();
+      expect(withinSidebar.getByText(/completed/i)).toBeInTheDocument();
     });
   });
 
-  describe("main section content", () => {
+  describe("Main section content", () => {
     test("main section Display Initial heaeder and empty list", () => {
       renderMainSectionWithContext({
         ...defaultTaskContext,
@@ -126,22 +98,7 @@ describe("User interaction", () => {
       renderMainSectionWithContext({
         ...defaultTaskContext,
         search: "meet",
-        tasks: [
-          {
-            id: "1",
-            title: "Team meeting",
-            completed: false,
-            createdAt: Date.now(),
-            description: "Team meeting description",
-          },
-          {
-            id: "2",
-            title: "Buy groceries",
-            completed: false,
-            createdAt: Date.now(),
-            description: "Buy groceries description",
-          },
-        ],
+        tasks: testData,
       });
       expect(
         screen.getByRole("button", { name: /team meeting/i })
@@ -176,39 +133,19 @@ describe("User interaction", () => {
     test("Today View are reflected correctly in the list", () => {
       renderMainSectionWithContext({
         ...defaultTaskContext,
-        tasks: [
-          {
-            id: "1",
-            title: "Test task",
-            completed: false,
-            createdAt: Date.now(),
-            description: "Test description",
-          },
-        ],
+        tasks: testData,
       });
-      expect(screen.getByText(/test task/i)).toBeInTheDocument();
+
+      expect(screen.getByText(/team meeting/i)).toBeInTheDocument();
+      expect(screen.getByText(/upcoming task/i)).toBeInTheDocument();
+      expect(screen.getByText(/completed task/i)).toBeInTheDocument();
     });
 
     test("Upcoming view shows only upcoming tasks", () => {
       renderMainSectionWithContext({
         ...defaultTaskContext,
         view: "Upcoming",
-        tasks: [
-          {
-            id: "1",
-            title: "Upcoming task",
-            completed: false,
-            createdAt: Date.now(),
-            description: "",
-          },
-          {
-            id: "2",
-            title: "Completed task",
-            completed: true,
-            createdAt: Date.now(),
-            description: "",
-          },
-        ],
+        tasks: testData,
       });
 
       expect(screen.getByText(/upcoming task/i)).toBeInTheDocument();
@@ -219,26 +156,11 @@ describe("User interaction", () => {
       renderMainSectionWithContext({
         ...defaultTaskContext,
         view: "Completed",
-        tasks: [
-          {
-            id: "1",
-            title: "Done task",
-            completed: true,
-            createdAt: Date.now(),
-            description: "",
-          },
-          {
-            id: "2",
-            title: "Active task",
-            completed: false,
-            createdAt: Date.now(),
-            description: "",
-          },
-        ],
+        tasks: testData,
       });
 
-      expect(screen.getByText(/done task/i)).toBeInTheDocument();
-      expect(screen.queryByText(/active task/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/completed task/i)).toBeInTheDocument();
+      expect(screen.queryByText(/upcoming task/i)).not.toBeInTheDocument();
     });
   });
 });
