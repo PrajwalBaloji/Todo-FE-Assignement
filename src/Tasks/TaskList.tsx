@@ -7,7 +7,7 @@ export default function TaskList() {
   const { tasks, view } = useTaskContext();
 
   const filteredList = useMemo(() => {
-    console.log("memoisation called");
+    // console.log("memoisation called");
 
     let list = tasks;
 
