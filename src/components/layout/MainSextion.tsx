@@ -1,3 +1,4 @@
+import { Activity } from "react";
 import AddTaskCard from "../../Tasks/AddTask";
 import TaskList from "../../Tasks/TaskList";
 import { useTaskContext } from "../../Tasks/TaskContext";
@@ -5,7 +6,7 @@ import SearchList from "../../Tasks/SearchList";
 
 export default function MainSection() {
   const { view, search } = useTaskContext();
-  const isSearch = search.length > 3;
+  const isSearch = search.length > 2;
   return (
     <main className="p-4 overflow-y-auto flex justify-center">
       <div className="w-full max-w-2xl ">
@@ -13,7 +14,11 @@ export default function MainSection() {
           {isSearch ? "Search" : view}
         </h1>
         <AddTaskCard />
-        {search.length > 3 ? <SearchList /> : <TaskList />}
+        <Activity mode={isSearch ? "hidden" : "visible"}>
+          <TaskList />
+        </Activity>
+
+        {isSearch && <SearchList />}
       </div>
     </main>
   );

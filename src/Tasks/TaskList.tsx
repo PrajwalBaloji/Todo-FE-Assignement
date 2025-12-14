@@ -1,17 +1,26 @@
 import TaskCard from "./TaskCard";
 import { useTaskContext } from "./TaskContext";
 import ExmptyList from "./EmptyList";
+import { useMemo } from "react";
 
 export default function TaskList() {
   const { tasks, view } = useTaskContext();
-  let filteredList = tasks;
 
-  if (view === "Upcoming") {
-    filteredList = tasks.filter((t) => !t.completed);
-  }
-  if (view === "Completed") {
-    filteredList = tasks.filter((t) => t.completed);
-  }
+  const filteredList = useMemo(() => {
+    console.log("memoisation called");
+
+    let list = tasks;
+
+    if (view === "Upcoming") {
+      list = tasks.filter((t) => !t.completed);
+    }
+    if (view === "Completed") {
+      list = tasks.filter((t) => t.completed);
+    }
+
+    return list;
+  }, [tasks, view]);
+
   if (filteredList.length === 0) {
     return <ExmptyList />;
   }
