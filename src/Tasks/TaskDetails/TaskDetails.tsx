@@ -34,7 +34,6 @@ export default function TaskDetails() {
         title: details.title,
         description: details.description,
       };
-      console.log({ updatedTask });
 
       updateTask(updatedTask);
       setSelectedTask(null);
