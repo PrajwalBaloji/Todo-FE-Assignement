@@ -22,10 +22,10 @@ export default function Sidebar() {
           "
         />
       </div>
-      <ul className="flex-1 px-2 space-y-1">
-        <div className="px-3 py-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">
-          Tasks
-        </div>
+      <div className="px-4 py-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+        Tasks
+      </div>
+      <ul className="flex-1 px-3 space-y-1">
         {Object.values(VIEWS).map((view) => (
           <SidebarItem key={view} label={view} />
         ))}

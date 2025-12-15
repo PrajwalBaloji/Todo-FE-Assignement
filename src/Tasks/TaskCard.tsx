@@ -32,6 +32,9 @@ export default function TaskCard({ task, searchText }: TaskCardProps) {
     >
       <div className="flex items-center gap-2">
         <input
+          aria-label={`Mark task ${title} as ${
+            completed ? "completed" : "not completed"
+          }`}
           type="checkbox"
           checked={completed}
           className="h-4 w-4 accent-gray-600 border-gray-300"
