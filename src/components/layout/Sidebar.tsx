@@ -1,5 +1,5 @@
 import { useTaskContext } from "../../Tasks/TaskContext";
-import type { View } from "../../Tasks/TaskContext/useTaskContext";
+import { VIEWS, type View } from "../../Tasks/TaskContext/useTaskContext";
 
 export default function Sidebar() {
   const { search, setSearch } = useTaskContext();
@@ -26,20 +26,20 @@ export default function Sidebar() {
         <div className="px-3 py-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">
           Tasks
         </div>
-        <SidebarItem label="Today" />
-        <SidebarItem label="Upcoming" />
-        <SidebarItem label="Completed" />
+        {Object.values(VIEWS).map((view) => (
+          <SidebarItem key={view} label={view} />
+        ))}
       </ul>
     </nav>
   );
 }
 
-function SidebarItem({ label }: { label: string }) {
+function SidebarItem({ label }: { label: View }) {
   const { setView } = useTaskContext();
   return (
     <li>
       <button
-        onClick={() => setView(label as View)}
+        onClick={() => setView(label)}
         className="
           w-full text-left px-3 py-2 rounded-md 
           hover:bg-gray-100 transition text-gray-700 cursor-pointer

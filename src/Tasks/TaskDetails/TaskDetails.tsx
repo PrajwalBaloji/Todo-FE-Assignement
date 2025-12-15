@@ -3,6 +3,7 @@ import { useTaskContext } from "../TaskContext";
 import Button from "../../components/base/Button/Button";
 import detailsReducer, { initialState } from "./detailsReducer";
 import useKeydownEvent from "../../hooks/useKeydownEvent";
+import { VIEWS } from "../TaskContext/useTaskContext";
 
 export default function TaskDetails() {
   const {
@@ -12,8 +13,9 @@ export default function TaskDetails() {
     updateTask,
     setSelectedTask,
     deleteTask,
-    focusTitle,
+    focusAddNewTask,
     setView,
+    tasks,
   } = useTaskContext();
   const [{ details, titleError, descriptionError }, dispatch] = useReducer(
     detailsReducer,
@@ -23,11 +25,17 @@ export default function TaskDetails() {
   const handleTaskDetails = () => {
     if (titleError || descriptionError || !details.title) return;
     if (selectedTask) {
+      const updatedTaskFromList = tasks.find(
+        (task) => task.id === selectedTask.id
+      );
+      if (!updatedTaskFromList) return;
       const updatedTask = {
-        ...selectedTask,
+        ...updatedTaskFromList,
         title: details.title,
         description: details.description,
       };
+      console.log({ updatedTask });
+
       updateTask(updatedTask);
       setSelectedTask(null);
     } else {
@@ -39,16 +47,15 @@ export default function TaskDetails() {
         createdAt: Date.now(),
       };
       addTask(newTask);
-      setView("Today");
+      setView(VIEWS.TODAY);
     }
     dispatch({ type: "reset" });
-    focusTitle();
+    focusAddNewTask();
   };
 
   const handleEscape = () => {
-    setSelectedTask(null);
     dispatch({ type: "reset" });
-    focusTitle();
+    focusAddNewTask();
   };
 
   const handleDelete = () => {

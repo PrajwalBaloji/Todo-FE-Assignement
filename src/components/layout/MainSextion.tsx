@@ -1,8 +1,8 @@
 import { Activity } from "react";
-import AddTaskCard from "../../Tasks/AddTask";
 import TaskList from "../../Tasks/TaskList";
 import { useTaskContext } from "../../Tasks/TaskContext";
 import SearchList from "../../Tasks/SearchList";
+import AddNewTaskCard from "../../Tasks/AddNewTask";
 
 export default function MainSection() {
   const { view, search } = useTaskContext();
@@ -13,7 +13,7 @@ export default function MainSection() {
         <h1 className="text-left text-4xl font-semibold mb-12">
           {isSearch ? "Search" : view}
         </h1>
-        <AddTaskCard />
+        <AddNewTaskCard />
         <Activity mode={isSearch ? "hidden" : "visible"}>
           <TaskList />
         </Activity>

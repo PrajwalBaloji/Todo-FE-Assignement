@@ -1,7 +1,13 @@
 import React, { useContext } from "react";
 import type { Task } from "../TaskCard";
 
-export type View = "Today" | "Upcoming" | "Completed";
+export const VIEWS = {
+  TODAY: "Today",
+  UPCOMING: "Upcoming",
+  COMPLETED: "Completed",
+} as const;
+
+export type View = (typeof VIEWS)[keyof typeof VIEWS];
 
 export interface TaskContextType {
   tasks: Task[];
@@ -44,7 +50,10 @@ export function useTaskContext() {
     setSearch,
   } = context;
 
-  const focusTitle = () => {
+  const focusAddNewTask = () => {
+    if (selectedTask) {
+      setSelectedTask(null);
+    }
     titleRef.current?.focus();
   };
 
@@ -74,7 +83,7 @@ export function useTaskContext() {
     updateTask,
     deleteTask,
     titleRef,
-    focusTitle,
+    focusAddNewTask,
     selectedTask,
     setSelectedTask,
     view,
