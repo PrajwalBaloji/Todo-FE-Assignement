@@ -5,13 +5,17 @@ import detailsReducer, { initialState } from "./detailsReducer";
 import useKeydownEvent from "../../hooks/useKeydownEvent";
 import { VIEWS } from "../TaskContext/useTaskContext";
 
-export default function TaskDetails() {
+export default function TaskDetails({
+  detailsSectionRef,
+}: {
+  detailsSectionRef: React.RefObject<HTMLElement | null>;
+}) {
   const {
     titleRef,
     addTask,
     selectedTask,
     updateTask,
-    setSelectedTask,
+    editTask,
     deleteTask,
     focusAddNewTask,
     setView,
@@ -36,7 +40,7 @@ export default function TaskDetails() {
       };
 
       updateTask(updatedTask);
-      setSelectedTask(null);
+      editTask(null);
     } else {
       const newTask = {
         id: Date.now().toString(),
@@ -64,7 +68,11 @@ export default function TaskDetails() {
     }
   };
 
-  useKeydownEvent({ key: "Enter", callback: handleTaskDetails });
+  useKeydownEvent({
+    key: "Enter",
+    callback: handleTaskDetails,
+    ref: detailsSectionRef,
+  });
   useKeydownEvent({ key: "Escape", callback: () => handleEscape() });
 
   useEffect(() => {

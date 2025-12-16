@@ -27,7 +27,7 @@ export const TaskContext = React.createContext<TaskContextType>({
   titleRef: React.createRef<HTMLInputElement>(),
   selectedTask: null,
   setSelectedTask: () => {},
-  view: "Today",
+  view: VIEWS.TODAY,
   setView: () => {},
   search: "",
   setSearch: () => {},
@@ -76,6 +76,13 @@ export function useTaskContext() {
     setSelectedTask(null);
   };
 
+  const editTask = (task: Task | null) => {
+    setSelectedTask(task);
+    if (task) {
+      titleRef.current?.focus();
+    }
+  };
+
   return {
     tasks,
     addTask,
@@ -85,7 +92,7 @@ export function useTaskContext() {
     titleRef,
     focusAddNewTask,
     selectedTask,
-    setSelectedTask,
+    editTask,
     view,
     setView,
     search,

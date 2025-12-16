@@ -17,13 +17,14 @@ interface TaskCardProps {
 
 export default function TaskCard({ task, searchText }: TaskCardProps) {
   const { completed, title } = task;
-  const { updateTaskStatus, setSelectedTask, selectedTask } = useTaskContext();
+
+  const { updateTaskStatus, editTask, selectedTask } = useTaskContext();
 
   return (
     <button
       aria-label={title}
       onClick={() => {
-        setSelectedTask(task);
+        editTask(task);
       }}
       className={clsx(
         "w-full p-3  border-t border-gray-200 hover:bg-gray-50 transition flex items-center justify-between gap-3 cursor-pointer",
@@ -33,7 +34,7 @@ export default function TaskCard({ task, searchText }: TaskCardProps) {
       <div className="flex items-center gap-2">
         <input
           aria-label={`Mark task ${title} as ${
-            completed ? "completed" : "not completed"
+            completed ? "not completed" : "completed"
           }`}
           type="checkbox"
           checked={completed}
@@ -47,7 +48,6 @@ export default function TaskCard({ task, searchText }: TaskCardProps) {
             completed ? "line-through text-gray-400" : "text-gray-600"
           )}
         >
-          {" "}
           {searchText ? highlightText(title, searchText) : title}
         </span>
       </div>
